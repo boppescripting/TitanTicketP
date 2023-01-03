@@ -4,12 +4,14 @@ const cors = require('cors')
 const morgan = require('morgan')
 
 const app = express()
-app.use(morgan('combine'))
+app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(cors())
 
-app.get('/status', (req, res) => {
-  res.sendStatus(200)
+app.post('/register', (req, res) => {
+  res.send({
+    message: `User '${req.body.email}' was registered with password '${req.body.password}'`
+  })
 })
 
 app.listen(process.env.PORT || 8081)
