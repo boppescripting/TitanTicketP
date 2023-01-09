@@ -5,7 +5,7 @@ module.exports = {
     const schema = Joi.object({
       email: Joi.string().email(),
       // eslint-disable-next-line prefer-regex-literals
-      password: Joi.string().regex(new RegExp('^[A-Za-z0-9]+!@#$%{8,32}$'))
+      password: Joi.string().regex(new RegExp('^[A-Za-z0-9]{8,32}$'))
     })
 
     const { error } = schema.validate(req.body)
@@ -19,7 +19,7 @@ module.exports = {
         case 'password':
           res.status(400).send({
             error: `The password provided failed to match the following rules:
-                <br />1. It must contain ONLY the following characters: lowercase, uppercase, numerics, !, @, #, $, %
+                <br />1. It must contain ONLY the following characters: lowercase, uppercase, and numerics.
                 <br />2. It must be at least 8 characters in length and not greater than 32 characters.
             `
           })
