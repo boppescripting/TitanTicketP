@@ -1,37 +1,38 @@
-<!-- <template>
+<template>
   <v-app>
     <v-layout column>
       <v-container xs6 offset-xs3>
         <div class="white elevation-2">
-          <v-toolbar flat dense class="cyan" dark>
+          <v-toolbar flat dense dark>
             <v-toolbar-title>Login</v-toolbar-title>
           </v-toolbar>
 
           <div class="pl-4 pr-4 pt-2 pb-2">
-            <v-container>
-              <v-row>
-                <v-col cols="12" sm="6" md="6">
-                  <v-text-field label="Email Address" type="email" name="email" v-model="email"></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="6">
-                  <v-text-field label="Password" type="password" name="password" v-model="password"></v-text-field>
-                </v-col>
-                <div class="error" v-html="error" />
-                <br>
-                <v-btn block @click="login">Login</v-btn>
-              </v-row>
-            </v-container>
+            <form>
+              <v-alert v-html="loginError" v-if="loginError" text type="error" class="reduced-font"></v-alert>
+              <v-container>
+                <v-row>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-text-field label="Email Address" type="email" name="email" v-model="email"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-text-field label="Password" type="password" name="password" v-model="password"></v-text-field>
+                  </v-col>
+                  <v-btn block @click="login">Login</v-btn>
+                </v-row>
+              </v-container>
+            </form>
           </div>
         </div>
       </v-container>
     </v-layout>
   </v-app>
-</template> -->
+</template>
 
-<template>
+<!-- <template>
   <v-dialog v-model="dialog" persistent max-width="600px">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn color="primary" dark v-bind="attrs" v-on="on">
+      <v-btn text dark v-bind="attrs" v-on="on">
         Login
       </v-btn>
     </template>
@@ -52,23 +53,21 @@
             </v-row>
           </v-container>
         </form>
-        <small>
-          <div class="error" v-html="error" />
-        </small>
+        <v-alert v-html="loginError" v-if="loginError" text type="error" class="reduced-font"></v-alert>
         <small>*indicates required field</small>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="dialog = false">
+        <v-btn color="red darken-1" text @click="dialog = false">
           Close
         </v-btn>
-        <v-btn color="blue darken-1" text @click="login">
+        <v-btn color="green darken-1" text @click="login">
           Login
         </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
-</template>
+</template> -->
 
 <script>
 import AuthenticationService from '@/services/AuthenticationService'
@@ -77,14 +76,14 @@ export default {
     return {
       email: '',
       password: '',
-      error: null,
+      loginError: null,
       dialog: false
     }
   },
   methods: {
     async login () {
       try {
-        this.error = null
+        this.loginError = null
         const response = await AuthenticationService.login({
           email: this.email,
           password: this.password
@@ -93,7 +92,7 @@ export default {
         this.$store.dispatch('setUser', response.data.user)
         this.$emit('close')
       } catch (err) {
-        this.error = err.response.data.error
+        this.loginError = err.response.data.error
       }
     }
   }
@@ -101,7 +100,7 @@ export default {
 </script>
 
 <style scoped>
-.error {
-  color: red;
+.reduced-font {
+  font-size: 12px;
 }
 </style>
